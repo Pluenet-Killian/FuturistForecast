@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Question;
+use App\Models\Response;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -45,5 +46,15 @@ class User extends Authenticatable
 
     public function questions() {
         return $this->hasMany(Question::class);
+    }
+
+    public function ignoreByQuestions() 
+    {
+        return $this->belongsToMany(Question::class, 'ignored_questions');
+    }
+    
+    public function responses() 
+    {
+        return $this->hasMany(Response::class);
     }
 }

@@ -5,6 +5,17 @@
 @section('javascript')
     @vite('resources/js/home/app.js')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @php
+        $close = asset('images/home/close.svg');
+        $arrowDown = asset('images/home/arrowDown.svg');
+        $home = asset('images/home/home.svg');
+        $notification = asset('images/home/notification.svg');
+        $pen = asset('images/home/pen.svg');
+        $questionMark = asset('images/home/questionMark.svg');
+        $search = asset('images/home/search.svg');
+        $profile = asset('images/home/profile.svg');
+        $logo = asset('images/home/logoFuturistForecast.jpg');
+    @endphp
 @endsection
 
 @section('content')
@@ -13,26 +24,28 @@
 
         <div  class="containerNewQuestion px-3 py-4 mx-auto w-[50%] h-[110px] bg-white mt-4 border border-gray-400 shadow-sm">
 
-            <form action="{{route('home.store')}}" method="post" id="formNewQuestion" class="">
+            <form action="{{route('home.store')}}" method="post" id="formNewQuestion">
                 @csrf
+                <input type="hidden" name="action" value="question">
                 @error('title')
                <p>{{$message}}</p>
                  @enderror
                 <input class="px-3 focus:outline-none w-full rounded-full border border-gray-600 bg-[#F1F2F2]/40 h-[40px] flex items-center cursor-pointer text-black hover:bg-[#F1F2F2]" placeholder="Que souhaitez-vous demander ou partager ?" name='title'>
-                
+            </form>
 
                 <div class="flex justify-between items-center w-full mt-4">
-                    <div class="flex items-center justify-center w-full cursor-pointer">
+                    <div class="flex items-center justify-center w-full cursor-pointer space-x-2">
+                        <img src="{{$questionMark}}" alt="questionMark image" class="w-[18px] h-[18px] ">
                         <p>Demander</p>
                     </div>
-                    <div class="flex items-center justify-center w-full cursor-pointer">
+                    <div class="flex items-center justify-center w-full cursor-pointer space-x-2">
+                        <img src="{{$pen}}" alt="questionMark image" class="w-[18px] h-[18px] ">
                         <p>Répondre</p>
                     </div>
-                    
+            
             </div>
         </div>
     </div>
-
 
 
     @foreach ($questions as $question)
@@ -52,22 +65,34 @@
                     @endif
                 </div>
             </div>
-            <p class="mb-2 mr-1 font-bold text-lg">X</p>
+           <img src="{{$close}}" alt="Close image" class="w-[25px] h-[25px] mb-5">
         </div>
         <div class="titleQuestion mt-2">
             <p class="font-semibold text-lg">{{$question->title}}</p>
         </div>
 
-        <p class="text-gray-700 font-semibold text-[14px] mt-1">109 réponses</p>
-        <div class="mt-2 flex space-x-4">
-            <button class="px-3 py-1 border border-gray-700 rounded-full text-gray-700">Répondre</button>
-            <button class="text-gray-700">Ignorer</button>
+        @foreach ($question->responses as $reponse)
+            {{$reponse->content}}
+        @endforeach
+
+        <div class="mt-2 flex space-x-4 items-center">
+            <p class="containerResponse px-3 py-1 border border-gray-700 rounded-full text-gray-700 cursor-pointer" data-questionid="{{$question->id}}" data-username="{{$question->user->name}}" data-questiontitle='{{$question->title}}' >Répondre</p>
+
+            <form action="{{route('home.store')}}" method="post">
+                @csrf
+                <input type="hidden" name="action" value="ignore">
+                <input type="hidden" name="user_id" value="{{$question->user->id}}">
+                <input type="hidden" name="question_id" value="{{$question->id}}">
+                <button type="submit" class="text-gray-700" data-questionid="{{$question->id}}" data-username="{{$question->user->name}}">Ignorer</button>
+            </form>
         </div>
     </div>
     @endforeach
-
-
         
-        {{-- @include('components.home.containerQuestion') --}}
+    @isset($question)
+
+        @include('components.home.containerQuestion')
         
+    @endisset
+    
 @endsection

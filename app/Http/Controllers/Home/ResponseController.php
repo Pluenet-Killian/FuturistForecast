@@ -2,60 +2,51 @@
 
 namespace App\Http\Controllers\Home;
 
-use App\Models\User;
 use App\Models\Question;
+use App\Models\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\QuestionRequest;
-use App\Models\ignoredQuestion;
-use App\Models\Response;
-use Carbon\Carbon;
+use App\Http\Requests\ResponseRequest;
 
-class QuestionController extends Controller
+class ResponseController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * 
      */
 
      private function getQuestions() {
-        dd(ignoredQuestion::where('user_id', Auth::id()))->pluck('question_id');
-        $ignoredQuestionIds = ignoredQuestion::where('user_id', Auth::id())->pluck('question_id');
-        return Question::whereNotIn('id', $ignoredQuestionIds)->orderBy('created_at', 'desc')->paginate(8);
+        return Question::orderBy('created_at', 'desc')->paginate(8);
     }
-
     public function index()
     {
-        $questions = $this->getQuestions();
-
-        return view('home.home', [
-            'questions' => $questions,
+         return view('home.home', [
+            'questions' => $this->getQuestions(),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
-      //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(QuestionRequest $request)
+    public function store(ResponseRequest $request)
     {
-        $question = new Question([
-            'title' => $request->title,
+        dd($request);
+        $response = new Response([
+            'content' => $request->content,
+            'question_id' => $request->question_id, // récupérer l'ID de la question du formulaire
             'user_id' => Auth::id(),
         ]);
-        $question->save();
-
-        return view('home.home', [
-            'questions' => $this->getQuestions()
-        ]);
+        $response->save();
+    
+        // Rediriger vers la question à laquelle la réponse a été donnée
+        return redirect()->route('home.index');
     }
 
     /**
@@ -63,7 +54,6 @@ class QuestionController extends Controller
      */
     public function show(string $id)
     {
-        //
     }
 
     /**
@@ -71,7 +61,6 @@ class QuestionController extends Controller
      */
     public function edit(string $id)
     {
-        //
     }
 
     /**
@@ -79,7 +68,6 @@ class QuestionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
     }
 
     /**

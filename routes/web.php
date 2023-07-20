@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Home\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Home\QuestionController;
+use App\Http\Controllers\Home\ResponseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,8 +35,8 @@ Route::middleware('auth')->get('/', function () {
 });
 
 Route::middleware('auth')->prefix('/home')->name('home.')->group(function() {
-    Route::resource('', QuestionController::class);
+    Route::get('/', [QuestionController::class, 'index'])->name('index');
+    Route::post('/', [PostController::class, 'store'])->name('store');
 });
-
 
 

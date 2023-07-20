@@ -1,16 +1,20 @@
 <div class="navbar w-full h-[60px] bg-white border border-gray-300 border-b-[1]">
-    <div class="w-full h-full flex items-center justify-center space-x-8">
-        <p>FuturistForecast</p>
-        <p>Home</p>
-        <p>Notification</p>
+    <div class="w-full h-full flex items-center justify-center space-x-6">
+        <img src="{{$logo}}" alt="profile image" class="h-[32px] cursor-pointer">
+        <img src="{{$home}}" alt="profile image" class="w-[32px] h-[32px] cursor-pointer">
+        <img src="{{$notification}}" alt="profile image" class="w-[28px] h-[28px] cursor-pointer">
         <form action="" method="get">
-            <input type="search" name="title" class="border border-gray-700  w-[325px] px-3 py-1" placeholder="Rechercher une prédiction"   >
+            <div class="flex items-center border border-gray-500 w-[325px]">
+                <img src="{{$search}}" alt="profile image" class="w-[23px] h-[23px] ml-2">
+                <input type="search" name="title" class="flex-grow px-2 py-1 outline-none" placeholder="Rechercher une prédiction">
+            </div>
+            
         </form>
         <div class="hidden sm:flex sm:items-center sm:ml-6">
             <x-dropdown align="right" width="48">
                 <x-slot name="trigger">
                     <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                        <div>{{ Auth::user()->name }}</div>
+                        <img src="{{$profile}}" alt="profile image" class="w-[32px] h-[32px] ">
         
                         <div class="ml-1">
                             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -32,7 +36,7 @@
                         <x-dropdown-link :href="route('logout')"
                                 onclick="event.preventDefault();
                                             this.closest('form').submit();">
-                            {{ __('Log Out') }}
+                            {{ __('Se déconnecter') }}
                         </x-dropdown-link>
                     </form>
                 </x-slot>
@@ -47,8 +51,9 @@
                 </svg>
             </button>
         </div>
-        <button class="rounded-full px-5 py-1 bg-red-700">
+        <button class="rounded-full px-5 py-1 bg-red-700 flex items-center justify-center space-x-2">
             <p class="text-white">Ajouter une question</p>
+            <img src="{{$arrowDown}}" alt="profile image" class="w-[20px] h-[20px] mt-1 ">
         </button>
     </div>
 </div>
