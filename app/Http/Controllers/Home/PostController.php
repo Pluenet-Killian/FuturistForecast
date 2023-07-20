@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
 use App\Models\Response;
+use App\Models\Vote;
 
 class PostController extends Controller
 {
@@ -30,6 +31,10 @@ class PostController extends Controller
             $this->storeResponse($validated);
         } elseif ($action === 'ignore') {
             $this->ignoreQuestion($request);
+        }
+
+        elseif ($action === 'vote') {
+            $this->vote($request);
         }
 
         return redirect()->route('home.index');
@@ -69,6 +74,50 @@ class PostController extends Controller
 
         return redirect()->route('home.index');
     }
+
+    public function vote(Request $request)
+    {
+        // Trouver un vote existant
+        $vote = Vote::where('user_id', $request->user_id)
+            ->where('question_id', $request->question_id)
+            ->first();
+    
+        // Si un vote existe déjà
+        if($vote) {
+            if ($request->has('upVote')) {
+                // Si l'utilisateur avait déjà upvoté, retirer le vote
+                if ($vote->vote == 1) {
+                    $vote->vote = 0;
+                } 
+                // Sinon, upvoter
+                else {
+                    $vote->vote = 1;
+                }
+            } elseif ($request->has('downVote')) {
+                // Si l'utilisateur avait déjà downvoté, retirer le vote
+                if ($vote->vote == -1) {
+                    $vote->vote = 0;
+                } 
+                // Sinon, downvoter
+                else {
+                    $vote->vote = -1;
+                }
+            }
+        } 
+        // Si aucun vote n'existe, créer un nouveau vote
+        else {
+            $vote = new Vote([
+                'user_id' => $request->user_id,
+                'question_id' => $request->question_id,
+                'vote' => $request->has('upVote') ? 1 : -1,
+            ]);
+        }
+    
+        $vote->save();
+    
+        return redirect()->route('home.index');
+    }
+    
 
 
 }

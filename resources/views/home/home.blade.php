@@ -15,6 +15,9 @@
         $search = asset('images/home/search.svg');
         $profile = asset('images/home/profile.svg');
         $logo = asset('images/home/logoFuturistForecast.jpg');
+        $upVote = asset('images/home/upVote.svg');
+        $downVote = asset('images/home/downVote.svg');
+        $comment = asset('images/home/comment.svg');
     @endphp
 @endsection
 
@@ -22,9 +25,9 @@
 
     @include('components.nav-bar')
 
-        <div  class="containerNewQuestion px-3 py-4 mx-auto w-[50%] h-[110px] bg-white mt-4 border border-gray-400 shadow-sm">
+        <div  class="containerNewQuestion px-3 py-4 mx-auto w-[45%] h-[110px] bg-white mt-4 border shadow-sm">
 
-            <form action="{{route('home.store')}}" method="post" id="formNewQuestion">
+            <form action="{{route('home.store')}}" method="post" id="formNewQuestion" class="containerQuestion">
                 @csrf
                 <input type="hidden" name="action" value="question">
                 @error('title')
@@ -34,11 +37,11 @@
             </form>
 
                 <div class="flex justify-between items-center w-full mt-4">
-                    <div class="flex items-center justify-center w-full cursor-pointer space-x-2">
+                    <div class="containerQuestion flex items-center justify-center w-full cursor-pointer space-x-2">
                         <img src="{{$questionMark}}" alt="questionMark image" class="w-[18px] h-[18px] ">
                         <p>Demander</p>
                     </div>
-                    <div class="flex items-center justify-center w-full cursor-pointer space-x-2">
+                    <div class="containerResponse flex items-center justify-center w-full cursor-pointer space-x-2">
                         <img src="{{$pen}}" alt="questionMark image" class="w-[18px] h-[18px] ">
                         <p>Répondre</p>
                     </div>
@@ -50,7 +53,7 @@
 
     @foreach ($questions as $question)
 
-    <div  class="containerNewQuestion px-3 py-3 mx-auto w-[50%] min-h-[175px] max-h-[425px] bg-white mt-6 border border-gray-400 shadow-sm">
+    <div  class="containerNewQuestion px-3 py-3 mx-auto w-[45%] min-h-[175px] max-h-[425px] bg-white mt-6 border  shadow-sm">
         <div class="navUser flex items-center space-x-4 justify-between">
             <div class="flex items-center space-x-4">
                 <div class="rounded-full flex items-center justify-center w-[35px] h-[35px] bg-gray-200">
@@ -76,7 +79,7 @@
         @endforeach
 
         <div class="mt-2 flex space-x-4 items-center">
-            <p class="containerResponse px-3 py-1 border border-gray-700 rounded-full text-gray-700 cursor-pointer" data-questionid="{{$question->id}}" data-username="{{$question->user->name}}" data-questiontitle='{{$question->title}}' >Répondre</p>
+            {{-- <p class="containerResponse px-3 py-1 border border-gray-700 rounded-full text-gray-700 cursor-pointer" data-questionid="{{$question->id}}" data-username="{{$question->user->name}}" data-questiontitle='{{$question->title}}' >Répondre</p>
 
             <form action="{{route('home.store')}}" method="post">
                 @csrf
@@ -84,7 +87,48 @@
                 <input type="hidden" name="user_id" value="{{$question->user->id}}">
                 <input type="hidden" name="question_id" value="{{$question->id}}">
                 <button type="submit" class="text-gray-700" data-questionid="{{$question->id}}" data-username="{{$question->user->name}}">Ignorer</button>
-            </form>
+            </form> --}}
+
+
+                <div class="flex space-x-3 items-center">
+
+            <div  data-questionid="{{$question->id}}" data-username="{{$question->user->name}}" data-questiontitle='{{$question->title}}' >
+               
+                <div class="flex items-center space-x-3 bg-gray-100/60   px-3 py-1 border border-gray-700 rounded-full text-gray-700  ">
+                    <div class="flex items-center justify-center space-x-2 border-gray-400 border-r-2 pr-3">
+                        <form action="{{route('home.store')}}" method="post">
+                            @csrf
+                            <input type="hidden" name="action" value="vote">
+                            <input type="hidden" name="user_id" value="{{$question->user->id}}">
+                            <input type="hidden" name="question_id" value="{{$question->id}}">
+                            <input type="hidden" name="upVote" value=1>
+                            <input type="hidden" name="downVote" value=0>
+
+                            <button type="submit" data-questionid="{{$question->id}}" data-username="{{$question->user->name}}" class="flex items-center justify-center space-x-2">
+                            
+                            <img src="{{$upVote}}" alt="Close image" class="w-[19px] h-[19px] ">
+                            @foreach ($question->votes as $vote)
+                                <p class="text-[15px] text-gray-700"> {{$vote->vote}}</p>
+                                @endforeach
+                        </form>
+                    </div>
+                  <img src="{{$downVote}}" alt="Close image" class="w-[19px] h-[19px] ">
+                </div>
+            </button>
+
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <div class="flex items-center justify-center space-x-2 border-gray-400">
+               
+                    <img src="{{$comment}}" alt="Close image" class="w-[19px] h-[19px] ">
+                    <p class="text-[15px] text-gray-700">76</p>
+                </div>
+            </div>
+        </div>
+
+            
+
         </div>
     </div>
     @endforeach
@@ -92,6 +136,7 @@
     @isset($question)
 
         @include('components.home.containerQuestion')
+        @include('components.home.containerResponse')
         
     @endisset
     

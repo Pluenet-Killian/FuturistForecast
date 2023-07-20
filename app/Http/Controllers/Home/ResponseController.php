@@ -37,7 +37,6 @@ class ResponseController extends Controller
      */
     public function store(ResponseRequest $request)
     {
-        dd($request);
         $response = new Response([
             'content' => $request->content,
             'question_id' => $request->question_id, // récupérer l'ID de la question du formulaire

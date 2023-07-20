@@ -20,7 +20,6 @@ class QuestionController extends Controller
      */
 
      private function getQuestions() {
-        dd(ignoredQuestion::where('user_id', Auth::id()))->pluck('question_id');
         $ignoredQuestionIds = ignoredQuestion::where('user_id', Auth::id())->pluck('question_id');
         return Question::whereNotIn('id', $ignoredQuestionIds)->orderBy('created_at', 'desc')->paginate(8);
     }
