@@ -75,38 +75,7 @@ class PostController extends Controller
         return redirect()->route('home.index');
     }
 
-    public function vote(Request $request)
-    {
-        // Find an existing vote
-        $vote = Vote::where('user_id', $request->user_id)
-            ->where('question_id', $request->question_id)
-            ->first();
     
-        $voteValue = $request->input('voteValue'); // this will be 1 for upvote and -1 for downvote
-    
-        // If a vote already exists
-        if($vote) {
-            // If the user had already voted the same way, remove the vote
-            if ($vote->vote == $voteValue) {
-                $vote->vote = 0;
-            } 
-            // Otherwise, record the new vote
-            else {
-                $vote->vote = $voteValue;
-            }
-        } 
-        // If no vote exists, create a new vote
-        else {
-            $vote = new Vote([
-                'user_id' => $request->user_id,
-                'question_id' => $request->question_id,
-                'vote' => $voteValue ,
-            ]);
-        }
-        $vote->save();
-    
-        return redirect()->route('home.index');
-    }
     
     
 

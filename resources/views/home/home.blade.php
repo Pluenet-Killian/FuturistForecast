@@ -5,6 +5,7 @@
 @section('javascript')
     @vite('resources/js/home/app.js')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     @php
         $close = asset('images/home/close.svg');
         $arrowDown = asset('images/home/arrowDown.svg');
@@ -21,8 +22,9 @@
     @endphp
 @endsection
 
-@section('content')
-
+    @section('content')
+    @livewireScripts
+    @livewireStyles 
     @include('components.nav-bar')
 
         <div  class="containerNewQuestion px-3 py-4 mx-auto w-[45%] h-[110px] bg-white mt-4 border shadow-sm">
@@ -94,23 +96,15 @@
 
             <div  data-questionid="{{$question->id}}" data-username="{{$question->user->name}}" data-questiontitle='{{$question->title}}' >
                
-                <div class="flex items-center space-x-3 bg-gray-100/60   px-3 py-1 border border-gray-700 rounded-full text-gray-700  ">
+                <div class="flex items-center space-x-3 bg-gray-100/60 px-3 py-1 border border-gray-700 rounded-full text-gray-700">
                     <div class="flex items-center justify-center space-x-2 border-gray-400 border-r-2 pr-3">
-                        <form action="{{route('home.store')}}" method="post">
-                            @csrf
-                            <input type="hidden" name="action" value="vote">
-                            <input type="hidden" name="user_id" value="{{Auth::id()}}">
-                            <input type="hidden" name="question_id" value="{{$question->id}}">
-                            <input type="hidden" name="voteValue" value=1>
-                            <button type="submit" data-questionid="{{$question->id}}" data-username="{{$question->user->name}}" class="flex items-center justify-center space-x-2">
-                                <img src="{{$upVote}}" alt="Close image" class="w-[19px] h-[19px] ">
-                                <p class="text-[15px] text-gray-700"> {{$question->totalVotes}}</p>
-                            </button>
-                        </form>
-                        
+                        @livewire('vote-component', ['userId' => Auth::id(), 'questionId' => $question->id, 'voteValue' => 1, 'totalVotes' => $question->totalVotes])
+                        <button wire:click="vote"></button>
                     </div>
-                  <img src="{{$downVote}}" alt="Close image" class="w-[19px] h-[19px] ">
+                    <img src="{{$downVote}}" alt="Close image" class="w-[19px] h-[19px]">
                 </div>
+                
+                
             </button>
 
             </div>
