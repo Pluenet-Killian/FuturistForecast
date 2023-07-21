@@ -16,6 +16,7 @@ class Vote extends Model
         'question_id',
         'upVote',
         'downVote',
+        'vote',
     ];
 
     

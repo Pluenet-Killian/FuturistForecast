@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Home;
 
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Vote;
 use App\Models\Question;
+use App\Models\Response;
 use Illuminate\Http\Request;
+use App\Models\ignoredQuestion;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\QuestionRequest;
-use App\Models\ignoredQuestion;
-use App\Models\Response;
-use Carbon\Carbon;
 
 class QuestionController extends Controller
 {
@@ -25,7 +26,7 @@ class QuestionController extends Controller
     }
 
     public function index()
-    {
+    {   
         $questions = $this->getQuestions();
 
         return view('home.home', [

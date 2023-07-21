@@ -99,18 +99,15 @@
                         <form action="{{route('home.store')}}" method="post">
                             @csrf
                             <input type="hidden" name="action" value="vote">
-                            <input type="hidden" name="user_id" value="{{$question->user->id}}">
+                            <input type="hidden" name="user_id" value="{{Auth::id()}}">
                             <input type="hidden" name="question_id" value="{{$question->id}}">
-                            <input type="hidden" name="upVote" value=1>
-                            <input type="hidden" name="downVote" value=0>
-
+                            <input type="hidden" name="voteValue" value=1>
                             <button type="submit" data-questionid="{{$question->id}}" data-username="{{$question->user->name}}" class="flex items-center justify-center space-x-2">
-                            
-                            <img src="{{$upVote}}" alt="Close image" class="w-[19px] h-[19px] ">
-                            @foreach ($question->votes as $vote)
-                                <p class="text-[15px] text-gray-700"> {{$vote->vote}}</p>
-                                @endforeach
+                                <img src="{{$upVote}}" alt="Close image" class="w-[19px] h-[19px] ">
+                                <p class="text-[15px] text-gray-700"> {{$question->totalVotes}}</p>
+                            </button>
                         </form>
+                        
                     </div>
                   <img src="{{$downVote}}" alt="Close image" class="w-[19px] h-[19px] ">
                 </div>

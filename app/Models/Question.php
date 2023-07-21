@@ -36,4 +36,11 @@ class Question extends Model
     {
         return $this->hasMany(Vote::class);
     }
+
+ 
+    public function getTotalVotesAttribute()
+    {
+        return Vote::where('question_id', $this->id)->sum('vote');
+    }
+
 }

@@ -77,46 +77,37 @@ class PostController extends Controller
 
     public function vote(Request $request)
     {
-        // Trouver un vote existant
+        // Find an existing vote
         $vote = Vote::where('user_id', $request->user_id)
             ->where('question_id', $request->question_id)
             ->first();
     
-        // Si un vote existe déjà
+        $voteValue = $request->input('voteValue'); // this will be 1 for upvote and -1 for downvote
+    
+        // If a vote already exists
         if($vote) {
-            if ($request->has('upVote')) {
-                // Si l'utilisateur avait déjà upvoté, retirer le vote
-                if ($vote->vote == 1) {
-                    $vote->vote = 0;
-                } 
-                // Sinon, upvoter
-                else {
-                    $vote->vote = 1;
-                }
-            } elseif ($request->has('downVote')) {
-                // Si l'utilisateur avait déjà downvoté, retirer le vote
-                if ($vote->vote == -1) {
-                    $vote->vote = 0;
-                } 
-                // Sinon, downvoter
-                else {
-                    $vote->vote = -1;
-                }
+            // If the user had already voted the same way, remove the vote
+            if ($vote->vote == $voteValue) {
+                $vote->vote = 0;
+            } 
+            // Otherwise, record the new vote
+            else {
+                $vote->vote = $voteValue;
             }
         } 
-        // Si aucun vote n'existe, créer un nouveau vote
+        // If no vote exists, create a new vote
         else {
             $vote = new Vote([
                 'user_id' => $request->user_id,
                 'question_id' => $request->question_id,
-                'vote' => $request->has('upVote') ? 1 : -1,
+                'vote' => $voteValue ,
             ]);
         }
-    
         $vote->save();
     
         return redirect()->route('home.index');
     }
+    
     
 
 
