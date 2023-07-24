@@ -1,12 +1,32 @@
 <div class="navbar w-full h-[60px] bg-white border border-gray-300 border-b-[1]">
     <div class="w-full h-full flex items-center justify-center space-x-6">
-        <img src="{{$logo}}" alt="profile image" class="h-[32px] cursor-pointer">
-        <img src="{{$home}}" alt="profile image" class="w-[32px] h-[32px] cursor-pointer">
+        <a href="/home">
+            <img src="{{$logo}}" alt="profile image" class="h-[32px] cursor-pointer">
+        </a>
+        <div class="homeLogo flex items-center justify-center  py-2 w-[55px]">
+            <a href="/home">
+                <img src="{{$home}}" alt="profile image" class="w-[32px] h-[32px] cursor-pointer mt-1">
+            </a>
+        </div>
+
+        <div class="penLogo flex items-center justify-center  py-[10px] w-[55px]">
+            <a href="/home/response">
+            <img src="{{$pen}}" alt="profile image" class="w-[28px] h-[28px] cursor-pointer mt-1">
+            </a>
+        </div>
+        
         <img src="{{$notification}}" alt="profile image" class="w-[28px] h-[28px] cursor-pointer">
         <form action="" method="get">
-            <div class="flex items-center border border-gray-500 w-[325px]">
+            <div class="searchBar flex items-center border border-gray-500 w-[325px] relative">
                 <img src="{{$search}}" alt="profile image" class="w-[23px] h-[23px] ml-2">
-                <input type="search" name="title" class="flex-grow px-2 py-1 outline-none" placeholder="Rechercher une prédiction">
+                <input type="search" id="search-input" name="search" class="flex-grow px-2 py-1 outline-none" placeholder="Rechercher une prédiction">
+                <div class="containerSearch absolute hidden w-full h-[250px] bg-white border border-gray-500 top-8">
+                    <div class="flex items-center py-2 flex-wrap  space-x-2">
+                        <img src="{{$search}}" alt="profile image" class="w-[28px] h-[28px] ml-2">
+                        <p class="font-semibold " id='search-text'>Rechercher : </p>
+                    </div>
+                    <hr>
+                </div>
             </div>
             
         </form>
@@ -51,7 +71,7 @@
                 </svg>
             </button>
         </div>
-        <button class="rounded-full px-5 py-1 bg-red-700 flex items-center justify-center space-x-2">
+        <button class="containerQuestion rounded-full px-5 py-1 bg-red-700 flex items-center justify-center space-x-2">
             <p class="text-white">Ajouter une question</p>
             <img src="{{$arrowDown}}" alt="profile image" class="w-[20px] h-[20px] mt-1 ">
         </button>

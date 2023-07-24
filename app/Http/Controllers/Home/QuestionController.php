@@ -12,6 +12,7 @@ use App\Models\ignoredQuestion;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\QuestionRequest;
+use Illuminate\Support\Facades\Storage;
 
 class QuestionController extends Controller
 {
@@ -20,16 +21,38 @@ class QuestionController extends Controller
      * 
      */
 
-     private function getQuestions() {
+     private function getQuestions($request) {
+        $query = Question::query();
         $ignoredQuestionIds = ignoredQuestion::where('user_id', Auth::id())->pluck('question_id');
-        return Question::whereNotIn('id', $ignoredQuestionIds)->orderBy('created_at', 'desc')->paginate(8);
+        $query->whereHas('responses')->whereNotIn('id', $ignoredQuestionIds);
+        if ($request->search) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        return $query->orderBy('created_at', 'desc')->paginate(8);
     }
 
-    public function index()
-    {   
-        $questions = $this->getQuestions();
 
+    public function index(Request $request)
+    {   
+        $questions = $this->getQuestions($request);
+        $now = Carbon::now();
+        $tenMinutesAgo = $now->copy()->subMinutes(10);
+
+        $recentQuestionsOfMe = Question::where('user_id', Auth::id())
+                                        ->whereBetween('created_at',[$tenMinutesAgo, $now])
+                                        ->latest('created_at')
+                                        ->first();
         return view('home.home', [
+            'questions' => $questions,
+            'recentQuestionsOfMe' => $recentQuestionsOfMe,
+        ]);
+    }
+
+    public function indexResponse()
+    {   
+        $questions = Question::whereDoesntHave('responses')->get();
+        return view('home.response', [
             'questions' => $questions,
         ]);
     }
@@ -54,7 +77,7 @@ class QuestionController extends Controller
         $question->save();
 
         return view('home.home', [
-            'questions' => $this->getQuestions()
+            'questions' => $this->getQuestions( $request)
         ]);
     }
 
@@ -85,8 +108,13 @@ class QuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+
+        $question = Question::findOrFail($id);
+        $question->delete();
+
+        return redirect()->route('home.index');
     }
 }

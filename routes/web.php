@@ -37,6 +37,10 @@ Route::middleware('auth')->get('/', function () {
 Route::middleware('auth')->prefix('/home')->name('home.')->group(function() {
     Route::get('/', [QuestionController::class, 'index'])->name('index');
     Route::post('/', [PostController::class, 'store'])->name('store');
+    Route::delete('/', [QuestionController::class, 'destroy'])->name('destroy');
+
+    Route::get('/response', [QuestionController::class, 'indexResponse'])->name('indexResponse');
+    Route::post('/response', [PostController::class, 'image'])->name('image');
 });
 
 

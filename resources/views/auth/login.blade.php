@@ -34,7 +34,7 @@
 
         <div class="w-full flex justify-between items-center mt-3">
             <div class="flex items-center  mt-4">
-                <a href="/register">S'inscrire</a>
+                <a href="/register" class="font-semibold">S'inscrire</a>
             </div>
             <div class="flex items-center justify-end mt-4">
                 @if (Route::has('password.request'))

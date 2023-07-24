@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('responses', function (Blueprint $table) {
             $table->id();
             $table->text('content');
+            $table->text('image_path');
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Question::class)->constrained()->cascadeOnDelete();
             $table->timestamps();

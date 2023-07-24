@@ -16,6 +16,7 @@ class PostController extends Controller
 {
     public function store(Request $request)
     {
+
         $action = $request->input('action');
         if ($action === 'question') {
             $validated = $request->validate([
@@ -26,18 +27,19 @@ class PostController extends Controller
         } elseif ($action === 'response') {
             $validated = $request->validate([
                 'content' => ['required'],
-                'question_id' => ['required']
+                'question_id' => ['required'],
+                'image_path' => ['image', 'max:2000']
             ]);
             $this->storeResponse($validated);
-        } elseif ($action === 'ignore') {
-            $this->ignoreQuestion($request);
-        }
-
+        } 
         elseif ($action === 'vote') {
             $this->vote($request);
         }
 
         return redirect()->route('home.index');
+    }
+
+    public function image(Request $request) {
     }
 
     private function storeQuestion(array $validated)
@@ -51,29 +53,24 @@ class PostController extends Controller
 
     public function storeResponse(array $validated)
     {
+        
+        $path = $validated['image_path']->store('home', 'public');
+        $fileName = basename($path);
+        
         $response = new Response([
             'content' => $validated['content'],
             'question_id' =>  $validated['question_id'], // récupérer l'ID de la question du formulaire
             'user_id' => Auth::id(),
+            'image_path' => $fileName,
         ]);
         $response->save();
     
         // Rediriger vers la question à laquelle la réponse a été donnée
         return redirect()->route('home.index');
     }
+    
 
-    public function ignoreQuestion(Request $request)
-    {
-
-        $ignoreQuestions = new ignoredQuestion([
-            'user_id' => $request->user_id,
-            'question_id' => $request->question_id,
-        ]);
-
-        $ignoreQuestions->save();
-
-        return redirect()->route('home.index');
-    }
+   
 
     
     

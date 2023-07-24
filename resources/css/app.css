@@ -5,3 +5,7 @@
 body {
     background-color: #f4f4f4;
 }
+
+.contentOverflow {
+    line-height: 23px;
+}

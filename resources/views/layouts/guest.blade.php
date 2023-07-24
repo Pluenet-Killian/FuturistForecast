@@ -17,7 +17,7 @@
     <body class="font-sans text-gray-900 antialiased w-full h-[100vh]">
         <div class="backgroundLogin w-full h-full bg-cover flex items-center justify-center" style="background-image: url('{{ asset('images/bg-login.png') }}')">
             <div class="w-full sm:max-w-xl  px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg ">
-            <p class="text-center font-semibold text-5xl">Quora</p>
+            <p class="text-center font-semibold text-5xl">FuturistForecast</p>
             <p class="text-center font-semibold text-gray-700 text-xl mt-4">Faites vos prédictions, qui sera le plus clairvoyant ?</p>
 
                 <div class="mt-8">

@@ -7,6 +7,7 @@
         <p class="text-2xl font-semibold ">Ajouter une question</p>
         <form action="{{route('home.store')}}" method="post" id="formNewResponse" class="mt-4">
             @csrf
+            <input type="hidden" name="action" value="question">
             <input class="outline-none border-b-2 border-black/20 py-2 w-full" placeholder="Que souhaitez-vous demander ou partager ?" name='title'>
 
 
@@ -17,5 +18,7 @@
             </button>
         </div>
     </form>
+
+ 
     </div>
 </div>

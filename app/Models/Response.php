@@ -13,6 +13,7 @@ class Response extends Model
         'content',
         'user_id',
         'question_id',
+        'image_path',
     ];
 
     public function user() {
